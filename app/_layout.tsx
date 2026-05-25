@@ -1,4 +1,5 @@
 // app/_layout.tsx
+import { setupAxiosInterceptors } from "@/api/client";
 import { getCurrentCustomer } from "@/api/customers/queries";
 import { queryClient } from "@api/queryClient";
 import {
@@ -10,7 +11,7 @@ import {
 import { auth } from "@services/firebase";
 import { useAuthStore } from "@store/auth.store";
 import { QueryClientProvider } from "@tanstack/react-query";
-import { Stack, useRouter, useSegments } from "expo-router";
+import { Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import { onAuthStateChanged } from "firebase/auth";
 import { useEffect } from "react";
@@ -27,24 +28,26 @@ export default function RootLayout() {
     Tajawal_700Bold,
   });
 
-  const { user, isHydrated, setUser, setHydrated } = useAuthStore();
-  const router = useRouter();
-  const segments = useSegments();
+  const { user, isHydrated, setUser, setHydrated, logout } = useAuthStore();
 
   useEffect(() => {
-    const unsub = onAuthStateChanged(auth, async (firebaseUser) => {
+    setupAxiosInterceptors(logout);
+  }, [logout]);
+
+  useEffect(() => {
+    const unsub = onAuthStateChanged(auth, (firebaseUser) => {
+      setHydrated(true);
       if (firebaseUser) {
-        try {
-          const customerProfile = await getCurrentCustomer();
-          setUser(customerProfile);
-        } catch (error) {
-          console.log("Customer profile missing, setting user to null.");
-          setUser(null);
-        }
+        getCurrentCustomer()
+          .then((customerProfile) => {
+            setUser(customerProfile);
+          })
+          .catch((error) => {
+            console.log("Customer profile missing or network error.");
+          });
       } else {
         setUser(null);
       }
-      setHydrated(true);
     });
 
     return () => unsub();
@@ -52,18 +55,10 @@ export default function RootLayout() {
 
   useEffect(() => {
     if (!isHydrated || !fontsLoaded) return;
-
-    const inProfileSetupGroup = segments[0] === "profile-setup";
-    const hasFirebaseSession = auth.currentUser !== null;
-
-    if (hasFirebaseSession && !user && !inProfileSetupGroup) {
-      router.replace("/profile-setup");
-    }
-
     SplashScreen.hideAsync();
-  }, [user, isHydrated, segments, fontsLoaded]);
+  }, [user, isHydrated, fontsLoaded]);
 
-  if (!fontsLoaded) return null;
+  if (!fontsLoaded || !isHydrated) return null;
 
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>

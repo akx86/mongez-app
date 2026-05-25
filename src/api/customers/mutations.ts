@@ -1,19 +1,19 @@
-import { Customer } from "@/types/schema.types";
+import { ApiResponse } from "@/types/api.types";
+import { Address, Customer } from "@/types/schema.types";
 import { apiClient } from "@api/client";
 
 export interface CreateCustomerPayload {
   full_name: string;
-  address_details: {
-    city: string;
-    street: string;
-    building: string;
-    coordinates: { lat: number; lng: number };
-  };
+  role: "customer";
+  address_details?: Address;
 }
 
 export async function createCustomerProfile(
   payload: CreateCustomerPayload,
 ): Promise<Customer> {
-  const { data } = await apiClient.post<Customer>("/register", payload);
-  return data;
+  const { data } = await apiClient.post<ApiResponse<Customer>>(
+    "/auth/register",
+    payload,
+  );
+  return data.data;
 }

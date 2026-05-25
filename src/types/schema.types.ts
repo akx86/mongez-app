@@ -34,7 +34,7 @@ export interface BaseUser extends BaseEntity {
 }
 
 export interface Customer extends BaseUser {
-  address_details: Address;
+  address_details?: Address;
   role: "customer";
   has_used_free_delivery: boolean;
   fake_orders_count: number;

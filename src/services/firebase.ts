@@ -1,7 +1,11 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { getApps, initializeApp } from "firebase/app";
 // @ts-ignore - Firebase types are broken for React Native conditional exports
-import { getReactNativePersistence, initializeAuth } from "firebase/auth";
+import {
+  connectAuthEmulator,
+  getReactNativePersistence,
+  initializeAuth,
+} from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
 
 const firebaseConfig = {
@@ -19,5 +23,10 @@ export const app =
 export const auth = initializeAuth(app, {
   persistence: getReactNativePersistence(AsyncStorage),
 });
+if (__DEV__) {
+  connectAuthEmulator(auth, "http://192.168.1.8:9099", {
+    disableWarnings: true,
+  });
+}
 
 export const db = getFirestore(app);
