@@ -5,6 +5,14 @@
     "version": "1.0.0",
     "scheme": "mongezapp",
     "platforms": ["ios", "android"],
+    "android": {
+      "softwareKeyboardLayoutMode": "resize"
+    },
+    "splash": {
+      "image": "./assets/images/splash-icon.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#2E7D32"
+    },
     "plugins": [
       "expo-router",
       "expo-font",
@@ -14,18 +22,8 @@
           "android": { "newArchEnabled": true },
           "ios": { "newArchEnabled": true }
         }
-      ]
-    ],
-    "android": {
-      "adaptiveIcon": {
-        "foregroundImage": "./assets/images/images/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
-      }
-    },
-    "ios": {
-      "icon": {
-        "tinted": "./assets/images/images/adaptive-icon.png"
-      }
-    }
+      ],
+      "expo-splash-screen"
+    ]
   }
 }

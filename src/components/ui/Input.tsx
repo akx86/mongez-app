@@ -15,10 +15,24 @@ interface InputProps extends TextInputProps {
   error?: string;
   leftIcon?: React.ReactNode;
   isPassword?: boolean;
+  inputClassName?: string;
+  inputContainerClassName?: string;
 }
 
 export const Input = forwardRef<TextInput, InputProps>(
-  ({ label, error, leftIcon, isPassword, className = "", ...props }, ref) => {
+  (
+    {
+      label,
+      error,
+      leftIcon,
+      isPassword,
+      className = "",
+      inputClassName = "",
+      inputContainerClassName = "",
+      ...props
+    },
+    ref,
+  ) => {
     const [isFocused, setIsFocused] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
 
@@ -39,15 +53,16 @@ export const Input = forwardRef<TextInput, InputProps>(
               : isFocused
                 ? "border-primary"
                 : "border-gray-200"
-          }`}
+          } ${inputContainerClassName}`}
         >
           {/* أيقونة يمين/شمال حسب تصميمك */}
           {leftIcon && <View className="mr-3">{leftIcon}</View>}
 
           <TextInput
             ref={ref}
-            // text-right عشان الأبلكيشن عربي
-            className="flex-1 text-text-main font-regular text-base text-right"
+            className={`flex-1 text-text-main font-regular text-base ${
+              inputClassName.includes("text-center") ? "" : "text-right"
+            } ${inputClassName}`}
             placeholderTextColor={colors.text.muted}
             onFocus={(e) => {
               setIsFocused(true);
