@@ -6,7 +6,7 @@ import {
   getReactNativePersistence,
   initializeAuth,
 } from "firebase/auth";
-import { getFirestore } from "firebase/firestore";
+import { connectFirestoreEmulator, getFirestore } from "firebase/firestore";
 
 const firebaseConfig = {
   apiKey: process.env.EXPO_PUBLIC_FIREBASE_API_KEY!,
@@ -23,10 +23,14 @@ export const app =
 export const auth = initializeAuth(app, {
   persistence: getReactNativePersistence(AsyncStorage),
 });
-if (__DEV__) {
-  connectAuthEmulator(auth, "http://192.168.1.8:9099", {
-    disableWarnings: true,
-  });
-}
 
 export const db = getFirestore(app);
+
+if (__DEV__) {
+  const LOCAL_IP = "192.168.1.35";
+
+  connectAuthEmulator(auth, `http://${LOCAL_IP}:9099`, {
+    disableWarnings: true,
+  });
+  connectFirestoreEmulator(db, LOCAL_IP, 8080);
+}

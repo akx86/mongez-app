@@ -68,7 +68,7 @@ export default function OtpVerifyScreen() {
       if (isNewUser) {
         router.replace("/(auth)/profile-setup");
       } else {
-        router.replace("/(auth)/profile-setup");
+        router.replace("/(tabs)");
       }
     } catch (err: unknown) {
       console.error("Invalid OTP:", err);
