@@ -3,11 +3,10 @@ import { useRouter } from "expo-router";
 import { useTopVendorsQuery } from "@/api/vendors/queries";
 import { Vendor } from "@/types/schema.types";
 
-export const useTopVendors = () => {
+export const useTopVendors = (domainId?: string) => {
   const router = useRouter();
 
-  // بنستدعي الكويري ونغير اسم data لـ vendors عشان يكون معبر أكتر في الواجهة
-  const { data: vendors, isLoading, isError } = useTopVendorsQuery();
+  const { data: vendors, isLoading, isError } = useTopVendorsQuery(domainId);
 
   // بنصنع دالة التوجيه هنا عشان الواجهة متكونش زحمة
   const handleVendorPress = (vendor: Vendor) => {

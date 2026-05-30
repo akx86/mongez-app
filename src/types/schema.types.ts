@@ -133,6 +133,13 @@ export interface MenuSection extends BaseEntity {
   sort_order: number;
 }
 
+export interface ProductAddon {
+  id: string;
+  name: string;
+  price: number;
+  is_required?: boolean;
+}
+
 export interface Product extends BaseEntity {
   vendor_id: string;
   vendor_name: string;
@@ -143,6 +150,8 @@ export interface Product extends BaseEntity {
   image_url: string;
   name: string;
   price: number;
+  description?: string;
+  addons?: ProductAddon[];
 }
 
 export interface Banner extends BaseEntity {
@@ -153,6 +162,7 @@ export interface Banner extends BaseEntity {
   bg_color: string;
   is_active: boolean;
   order: number;
+  domain_id?: string;
   action_type: BannerActionType;
   action_payload: string | null;
 }

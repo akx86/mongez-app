@@ -8,3 +8,6 @@ export const formatRating = (rating: number): string => rating.toFixed(1);
 
 export const formatDeliveryFee = (fee: number): string =>
   fee === 0 ? "توصيل مجاني" : formatPrice(fee);
+
+export const formatDeliveryTime = (min: number, max: number): string =>
+  `${min}-${max} د`;

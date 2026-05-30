@@ -15,8 +15,12 @@ import {
 const { width } = Dimensions.get("window");
 const BANNER_WIDTH = width - 32;
 
-export const HomeBanners = () => {
-  const { banners, isLoading, isError, handleAction } = useHomeBanners();
+interface HomeBannersProps {
+  domainId?: string;
+}
+
+export const HomeBanners = ({ domainId }: HomeBannersProps) => {
+  const { banners, isLoading, isError, handleAction } = useHomeBanners(domainId);
   const [activeIndex, setActiveIndex] = useState(0);
 
   const onViewableItemsChanged = useCallback(

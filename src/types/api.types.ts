@@ -16,3 +16,28 @@ export interface ApiError {
   code: string;
   status: number;
 }
+
+/** POST /api/orders request body (V4 architecture) */
+export interface CreateOrderItemPayload {
+  id: string;
+  quantity: number;
+  price: number;
+  name: string;
+}
+
+export interface CreateOrderPayload {
+  vendor_id: string;
+  payment_method: "cash" | "visa";
+  items: CreateOrderItemPayload[];
+  delivery_address: {
+    city: string;
+    street: string;
+    building: string;
+    floor?: string;
+    apartment?: string;
+    coordinates: {
+      lat: number;
+      lng: number;
+    };
+  };
+}

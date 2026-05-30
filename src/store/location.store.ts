@@ -9,6 +9,11 @@ export interface LocationState {
   isLoading: boolean;
   error: string | null;
 
+  setLocation: (params: {
+    latitude: number;
+    longitude: number;
+    addressLabel: string;
+  }) => void;
   fetchCurrentLocation: () => Promise<void>;
 }
 
@@ -19,6 +24,15 @@ export const useLocationStore = create<LocationState>((set) => ({
   addressLabel: null,
   isLoading: false,
   error: null,
+
+  setLocation: ({ latitude, longitude, addressLabel }) =>
+    set({
+      latitude,
+      longitude,
+      addressLabel,
+      isLoading: false,
+      error: null,
+    }),
 
   // 3. منطق جلب الموقع
   fetchCurrentLocation: async () => {

@@ -5,10 +5,10 @@ import * as Linking from "expo-linking";
 import { useRouter } from "expo-router";
 import { useMemo } from "react";
 
-export const useHomeBanners = () => {
+export const useHomeBanners = (domainId?: string) => {
   const router = useRouter();
   const { user } = useAuthStore();
-  const { data: fetchedBanners, isLoading, isError } = useActiveBanners();
+  const { data: fetchedBanners, isLoading, isError } = useActiveBanners(domainId);
 
   // البانر الافتراضي لأول أوردر، واخد نفس شكل الـ Banner في الداتا بيز
   const freeOrderBanner: Banner = {
@@ -27,6 +27,10 @@ export const useHomeBanners = () => {
   };
 
   const finalBanners = useMemo(() => {
+    if (domainId) {
+      return fetchedBanners ? [...fetchedBanners] : [];
+    }
+
     let bannersToDisplay = fetchedBanners ? [...fetchedBanners] : [];
 
     // التشيك على الحقل الحقيقي المطابق للباك إند
@@ -38,7 +42,7 @@ export const useHomeBanners = () => {
     }
 
     return bannersToDisplay;
-  }, [fetchedBanners, user]);
+  }, [fetchedBanners, user, domainId]);
 
   const handleAction = (banner: Banner) => {
     if (!banner.action_type || banner.action_type === "none") return;
@@ -47,7 +51,7 @@ export const useHomeBanners = () => {
       case "navigate_domain":
         if (banner.action_payload) {
           router.push({
-            pathname: "/(main)/category/[id]" as any,
+            pathname: "/(main)/domain/[id]" as any,
             params: { id: banner.action_payload },
           });
         }

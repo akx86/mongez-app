@@ -11,8 +11,13 @@ import {
   View,
 } from "react-native";
 
-export const TopVendors = () => {
-  const { vendors, isLoading, isError, handleVendorPress } = useTopVendors();
+interface TopVendorsProps {
+  domainId?: string;
+}
+
+export const TopVendors = ({ domainId }: TopVendorsProps) => {
+  const { vendors, isLoading, isError, handleVendorPress } =
+    useTopVendors(domainId);
 
   if (isError || (!isLoading && vendors.length === 0)) return null;
 
